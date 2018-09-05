@@ -32,7 +32,8 @@
 #include "modules/planning/common/obstacle.h"
 //#include "modules/planning/common/planning_gflags.h"
 #include "modules/planning/common/lag_prediction.h"
-#include "modules/common/adapters/adapter_manager.h"
+
+//#include "modules/common/adapters/adapter_manager.h"
 //using apollo::perception::PerceptionObstacle;
 
 void createObstacle(apollo::prediction::PredictionObstacles *pobstacles){
@@ -71,21 +72,21 @@ int main(void){
     apollo::prediction::PredictionObstacles prediction_obstacles;
     //apollo::perception::PerceptionObstacle perception_obstacle;
     apollo::planning::LagPrediction lag(1, 1);
-    apollo::common::adapter::AdapterManagerConfig amd;
-    apollo::common::adapter::AdapterConfig *config = amd.add_config();
-    config->set_type(apollo::common::adapter::AdapterConfig_MessageType_PREDICTION);
-    config->set_mode(apollo::common::adapter::AdapterConfig_Mode_PUBLISH_ONLY);
-    config->set_message_history_limit(10);
-    amd.set_is_ros(false);
+    // apollo::common::adapter::AdapterManagerConfig amd;
+    // apollo::common::adapter::AdapterConfig *config = amd.add_config();
+    // config->set_type(apollo::common::adapter::AdapterConfig_MessageType_PREDICTION);
+    // config->set_mode(apollo::common::adapter::AdapterConfig_Mode_PUBLISH_ONLY);
+    // config->set_message_history_limit(10);
+    // amd.set_is_ros(false);
     createObstacle(&prediction_obstacles);
-    apollo::common::adapter::AdapterManager::Init(amd);
-    ///prediction_obstacles.prediction_obstacle();
-    apollo::common::adapter::AdapterManager::FeedPredictionData(prediction_obstacles);
-    apollo::common::adapter::AdapterManager::Observe();
-    std::cout<< apollo::common::adapter::AdapterManager::GetPrediction()->Empty()<< std::endl;
+    // apollo::common::adapter::AdapterManager::Init(amd);
+    // ///prediction_obstacles.prediction_obstacle();
+    // apollo::common::adapter::AdapterManager::FeedPredictionData(prediction_obstacles);
+    // apollo::common::adapter::AdapterManager::Observe();
+    // std::cout<< apollo::common::adapter::AdapterManager::GetPrediction()->Empty()<< std::endl;
     //apollo::common::adapter::AdapterManager::FeedPredictionFile(&prediction_obstacles);
     //prediction_obstacles.mutable_prediction_obstacle();
-    std::cout<< prediction_obstacles.has_header()<<std::endl;
+    //std::cout<< prediction_obstacles.has_header()<<std::endl;
     //std::cout<< prediction_obstacles.mutable_prediction_obstacle()->
     //prediction_obstacles.clear_prediction_obstacle();
     lag.GetLaggedPrediction(&prediction_obstacles);
