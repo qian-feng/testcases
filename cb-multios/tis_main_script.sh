@@ -1,8 +1,8 @@
-PROJ_PATH=${PROJ_PATH}
+PROJ_PATH=/home/cgc/cb-multios/
 
 OPT=(                       
     -gui                       
-    -slevel 10                       
+    -slevel 1000000                       
     -val                       
     -address-alignment 16                       
     -unsafe-arrays                       
