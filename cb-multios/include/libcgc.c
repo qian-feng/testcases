@@ -15,7 +15,7 @@
 #include <sys/select.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <err.h>
+//#include <err.h>
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #define MAX(a, b) (((a) < (b)) ? (b) : (a))
@@ -53,7 +53,7 @@ int cgc_receive(int fd, void *buf, cgc_size_t count, cgc_size_t *rx_bytes) {
 }
 
 /* Marshal a CGC fd set into an OS fd set. */
-int cgc_copy_cgc_fd_set(const cgc_fd_set *cgc_fds, fd_set *os_fds, int *num_fds) {
+static int cgc_copy_cgc_fd_set(const cgc_fd_set *cgc_fds, fd_set *os_fds, int *num_fds) {
   for (unsigned fd = 0; fd < CGC__NFDBITS; ++fd) {
     if (CGC_FD_ISSET(fd, cgc_fds)) {
       // Shouldn't be using an fd greater than the allowed values
@@ -151,16 +151,8 @@ int cgc_fdwait(int nfds, cgc_fd_set *readfds, cgc_fd_set *writefds,
  * ideally, this code will also work on 64-bit.
  */
 int cgc_allocate(cgc_size_t length, int is_executable, void **addr) {
-  int page_perms = PROT_READ | PROT_WRITE;
-  if (is_executable)
-    page_perms |= PROT_EXEC;
-
-  void *return_address = mmap(NULL, length, page_perms, MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
-
-  if (return_address == MAP_FAILED) {
-    return errno;
-  }
-
+  void *return_address = malloc(length);
+  if(return_address == NULL) return errno;
   if (addr)
     *addr = return_address;
 
@@ -172,11 +164,7 @@ int cgc_allocate(cgc_size_t length, int is_executable, void **addr) {
 /* Deallocate some range of memory and mark the pages as free. */
 int cgc_deallocate(void *addr, cgc_size_t length) {
 
-  const int ret = munmap(addr, length);
-
-  if (ret < 0) {
-    return errno;
-  }
+  free(addr);
 
   return 0;
 }
@@ -186,6 +174,7 @@ static cgc_prng *cgc_internal_prng = NULL;
 /**
  * Initializes the prng for use with cgc_random and the flag page
  */
+/*
 static void cgc_try_init_prng() {
     // Don't reinitialize
     if (cgc_internal_prng != NULL) return;
@@ -232,8 +221,13 @@ static void __attribute__ ((constructor)) cgc_initialize_flag_page(void) {
                          MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS,
                          -1, 0);
 
+  //if (mmap_addr != CGC_FLAG_PAGE_ADDRESS) {
+    //err(1, "[!] Failed to map the flag page");
+  //  return;
+  //}
 
   // Fill the flag page with bytes from the prng
   cgc_try_init_prng();
   cgc_aes_get_bytes(cgc_internal_prng, PAGE_SIZE, mmap_addr);
 }
+*/

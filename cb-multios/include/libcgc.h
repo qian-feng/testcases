@@ -51,7 +51,7 @@ typedef long cgc_ssize_t;
 typedef long int _fd_mask;
 
 #define CGC__NFDBITS (8 * sizeof(_fd_mask))
-
+#define NFDBITS CGC__NFDBITS
 typedef struct {
     _fd_mask _fd_bits[CGC_FD_SETSIZE / CGC__NFDBITS];
 } cgc_fd_set;
@@ -86,7 +86,7 @@ struct cgc_timeval {
 
 #ifndef LIBCGC_IMPL
 # define FD_SETSIZE CGC_FD_SETSIZE
-# define _NFDBITS CGC__NFDBITS
+# define NFDBITS CGC__NFDBITS
 # define FD_ZERO CGC_FD_ZERO
 # define FD_SET CGC_FD_SET
 # define FD_CLR CGC_FD_CLR

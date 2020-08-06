@@ -33,23 +33,46 @@ This is a helper script to test all challenges using `cb-test`. Results are summ
 
 The following steps will build both the patched and unpatched binaries in `build/challenges/[challenge]/`.
 
-### OS X/Linux
+### MacOS
+
+The challenges build as i386 binaries, but Mac OS 10.14+ only supports building x86-64 binaries by default. To enable i386 support, run the following command:
+
+```
+sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+```
+
+After this, proceed to the common directions for MacOS and Linux.
+
+### Linux
 
 The following packages are required for building the challenges on Linux:
 
 ```
-libc6-dev
-libc6-dev-i386
-gcc-multilib
-g++-multilib
-clang-3.8 (or higher)
+libc6-dev libc6-dev-i386 gcc-multilib g++-multilib clang cmake
 ```
 
-To build all challenges, run:
+### MacOS/Linux Common Directions
+
+First, install pre-requisites via pip.
+
+```
+sudo pip install xlsxwriter pycrypto defusedxml pyyaml matplotlib
+```
+
+Then to build all challenges, run:
 
 ```bash
 $ ./build.sh
 ```
+
+If you are **absolutely certain** that you don't intend to use any of the Python components of the
+build or repository, you can tell the build script to ignore them:
+
+```bash
+$ NO_PYTHON_I_KNOW_WHAT_I_AM_DOING_I_SWEAR=1 ./build.sh
+```
+
+This is **not** a publicly supported build mode.
 
 ### Windows
 
